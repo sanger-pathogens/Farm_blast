@@ -45,7 +45,7 @@ def get_opts(args=None):
 class Pipeline:
     def __init__(self, options):
         if options.outdir is None:
-            options.outdir = '.'.join(['Farm_blast', options.reference, options.query, 'out'])
+            options.outdir = '.'.join(['Farm_blast', os.path.basename(options.reference), os.path.basename(options.query), 'out'])
 
         self.outdir = os.path.abspath(options.outdir)
         self.reference = os.path.abspath(options.reference)
