@@ -6,12 +6,12 @@ Python3 module to run blast+ or blastall in parallel on an LSF compute farm
 Installation
 ------------
 
-Prerequistes:
+Prerequisites:
   * [NCBI BLAST] [NCBI BLAST] blast+, and optionally blastall, installed and their commands in your path
   * [Fastaq] [Fastaq] >= v0.1
   * [Farmpy] [Farmpy] >= v0.2
 
-Once the preequisites are installed, run the tests:
+Once the prerequisites are installed, run the tests:
 
     python3 setup.py test
 
