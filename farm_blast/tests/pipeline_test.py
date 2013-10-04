@@ -26,17 +26,42 @@ class TestPipeline(unittest.TestCase):
         self.p = pipeline.Pipeline(options)
         
 
-    def test_make_setup_script(self):
+    def test_make_setup_script_ref_already_indexed(self):
+        expected_script = 'tmp.make_setup_script_expected'
+        test_script = 'tmp.make_setup_script_test'
+        ref = os.path.join(data_dir, 'pipeline_test.ref.indexed.fa')
+        options = pipeline.get_opts(args=[
+            '--no_bsub',
+            '--split_bases_tolerance', '1',
+            '--split_bases', '100',
+            '--outdir', 'tmp.Farm_blast_test',
+            '--bsub_name_prefix', 'name',
+            ref,
+            self.qry])
+        self.p = pipeline.Pipeline(options)
+        self.p._make_setup_script(script_name=test_script)
+
+        f = open(expected_script, 'w')
+        print('set -e', file=f)
+        print('fastaq_to_fasta -s', os.path.abspath(self.qry), '- |',
+              'fastaq_chunker - query.split 100 1', file=f)
+        f.close()
+        self.assertTrue(filecmp.cmp(expected_script, test_script))
+        os.unlink(expected_script)
+        os.unlink(test_script)
+
+
+    def test_make_setup_script_convert_ref(self):
         expected_script = 'tmp.make_setup_script_expected'
         test_script = 'tmp.make_setup_script_test'
         self.p._make_setup_script(script_name=test_script)
 
         f = open(expected_script, 'w')
         print('set -e', file=f)
-        print('ln -s', os.path.abspath(self.ref), 'reference.fa', file=f)
+        print('fastaq_to_fasta -s', os.path.abspath(self.ref), 'reference.fa', file=f)
         print('makeblastdb -dbtype nucl -in reference.fa', file=f)
-        print("awk '{print $1}'", os.path.abspath(self.qry), '> query.fa', file=f)
-        print('fastaq_chunker query.fa query.split 100 1', file=f)
+        print('fastaq_to_fasta -s', os.path.abspath(self.qry), '- |',
+              'fastaq_chunker - query.split 100 1', file=f)
         f.close()
         self.assertTrue(filecmp.cmp(expected_script, test_script))
         os.unlink(expected_script)
