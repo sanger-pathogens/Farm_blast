@@ -35,8 +35,8 @@ advanced_opts_group.add_argument('--debug', action='store_true', help='Just make
 advanced_opts_group.add_argument('--outdir', help='Name of output directory (must not exist already)', metavar='output directory', default=None)
 advanced_opts_group.add_argument('--split_bases', type=int, help='Number of bases in each split file of query. Default is 500000, except set to 200000 if blastall tblastx is used', metavar='INT', default=None)
 
-parser.add_argument('reference', help='Name of reference file. Does not need to be indexed already. If not indexed, can be any format from FASTA, FASTQ, GFF3, EMBL, Phylip', metavar='reference')
-parser.add_argument('query', help='Name of query file. Can be any format from FASTA, FASTQ, GFF3, EMBL, Phylip', metavar='query')
+parser.add_argument('reference', help='Name of reference file. Does not need to be indexed already. If not indexed, can be any format from FASTA, FASTQ, GFF3, EMBL, Phylip, GBK', metavar='reference')
+parser.add_argument('query', help='Name of query file. Can be any format from FASTA, FASTQ, GFF3, EMBL, Phylip, GBK', metavar='query')
 
 def get_opts(args=None):
     return parser.parse_args(args=args)
