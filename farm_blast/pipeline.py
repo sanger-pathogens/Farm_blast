@@ -88,7 +88,6 @@ class Pipeline:
             'blast.out.tmp.gz',
             '02.array.id',
             '03.combine.sh.id',
-            'query.fa'
         ]
 
         if not options.blast_mem:
