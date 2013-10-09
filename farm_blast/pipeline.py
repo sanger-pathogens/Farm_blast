@@ -10,7 +10,7 @@ class Error (Exception): pass
 
 parser = argparse.ArgumentParser(
     description = 'Run BLAST in parallel on the farm',
-    usage = '%(prog)s [options] <reference.fasta> <query.fasta>')
+    usage = '%(prog)s [options] <reference> <query>')
 
 parser.add_argument('--no_bsub', action='store_true', help=argparse.SUPPRESS)
 parser.add_argument('--fix_coords_in_blast_output', action='store_true', help=argparse.SUPPRESS)
@@ -35,8 +35,8 @@ advanced_opts_group.add_argument('--debug', action='store_true', help='Just make
 advanced_opts_group.add_argument('--outdir', help='Name of output directory (must not exist already)', metavar='output directory', default=None)
 advanced_opts_group.add_argument('--split_bases', type=int, help='Number of bases in each split file of query. Default is 500000, except set to 200000 if blastall tblastx is used', metavar='INT', default=None)
 
-parser.add_argument('reference', help='Name of reference FASTA file', metavar='reference fasta')
-parser.add_argument('query', help='Name of query FASTA file', metavar='query fasta')
+parser.add_argument('reference', help='Name of reference file. Does not need to be indexed already. If not indexed, can be any format from FASTA, FASTQ, GFF3, EMBL, Phylip, GBK', metavar='reference')
+parser.add_argument('query', help='Name of query file. Can be any format from FASTA, FASTQ, GFF3, EMBL, Phylip, GBK', metavar='query')
 
 def get_opts(args=None):
     return parser.parse_args(args=args)
@@ -88,7 +88,6 @@ class Pipeline:
             'blast.out.tmp.gz',
             '02.array.id',
             '03.combine.sh.id',
-            'query.fa'
         ]
 
         if not options.blast_mem:
@@ -121,7 +120,7 @@ class Pipeline:
 
         print('set -e', file=f)
         if not self.blast.blast_db_exists():
-            print('ln -s', self.reference, 'reference.fa', file=f)
+            print('fastaq_to_fasta -s', self.reference, 'reference.fa', file=f)
             self.reference = 'reference.fa'
             self.blast.reference = self.reference
             print(self.blast.format_database_command(), file=f)
@@ -129,9 +128,8 @@ class Pipeline:
            
         # blast strips off everything after the first whitespace, so do this
         # before chunking so names stay consistent with query fasta and in blast output
-        print("awk '{print $1}'", self.query, '> query.fa', file=f)
-        print('fastaq_chunker', 'query.fa', 'query.split', self.split_bases, self.split_bases_tolerance, file=f)
-
+        print('fastaq_to_fasta -s', self.query, '- |',
+              'fastaq_chunker', '-', 'query.split', self.split_bases, self.split_bases_tolerance, file=f)
         f.close()
         
 
