@@ -129,7 +129,7 @@ class Pipeline:
         # blast strips off everything after the first whitespace, so do this
         # before chunking so names stay consistent with query fasta and in blast output
         print('fastaq_to_fasta -s', self.query, '- |',
-              'fastaq_chunker', '-', 'query.split', self.split_bases, self.split_bases_tolerance, file=f)
+              'fastaq_chunker --skip_all_Ns', '-', 'query.split', self.split_bases, self.split_bases_tolerance, file=f)
         f.close()
         
 
