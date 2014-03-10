@@ -1,3 +1,7 @@
+# BLASTN 2.2.26 [Sep-21-2011]
+# Query: 2 sequences
+# Database: pipeline_test.ref.indexed.fa
+# Fields: Query id, Subject id, % identity, alignment length, mismatches, gap openings, q. start, q. end, s. start, s. end, e-value, bit score
 seq1	r1	100	10	0	0	1	10	1	10	0.1	10
 seq1	r1	100	10	0	0	1	10	1	10	0.1	10
 seq1	r1	100	10	0	0	1	10	1	10	0.1	10

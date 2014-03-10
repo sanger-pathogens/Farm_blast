@@ -117,7 +117,7 @@ class Blast:
     def _make_blast_type_string(self):
         if self.blastall:
             if self.blast_type == 'megablast':
-                return 'blastall -p blastn -n'
+                return 'blastall -p blastn -n T'
             else:
                 return 'blastall -p ' + self.blast_type
         else:

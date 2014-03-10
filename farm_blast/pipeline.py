@@ -15,6 +15,7 @@ parser = argparse.ArgumentParser(
 parser.add_argument('--no_bsub', action='store_true', help=argparse.SUPPRESS)
 parser.add_argument('--fix_coords_in_blast_output', action='store_true', help=argparse.SUPPRESS)
 parser.add_argument('--split_bases_tolerance', type=int, default=1000, help=argparse.SUPPRESS)
+parser.add_argument('--test', action='store_true', help=argparse.SUPPRESS)
 
 common_blast_group = parser.add_argument_group('Common BLAST options')
 common_blast_group.add_argument('--blastall', action='store_true', help='Use blastall instead of the default blast+')
@@ -43,7 +44,7 @@ def get_opts(args=None):
 
 
 class Pipeline:
-    def __init__(self, options):
+    def __init__(self, options, farm_blast_script):
         if options.outdir is None:
             options.outdir = '.'.join(['Farm_blast', os.path.basename(options.reference), os.path.basename(options.query), 'out'])
 
@@ -51,6 +52,8 @@ class Pipeline:
         self.reference = os.path.abspath(options.reference)
         self.query = os.path.abspath(options.query)
         self.bsub_queue = options.bsub_queue
+        self.farm_blast_script = farm_blast_script
+        self.test = options.test
 
         self.blast = blast.Blast(
             self.reference,
@@ -125,13 +128,13 @@ class Pipeline:
             self.blast.reference = self.reference
             print(self.blast.format_database_command(), file=f)
             self.files_to_delete.append('reference.*')
-           
+
         # blast strips off everything after the first whitespace, so do this
         # before chunking so names stay consistent with query fasta and in blast output
         print('fastaq_to_fasta -s', self.query, '- |',
               'fastaq_chunker --skip_all_Ns', '-', 'query.split', self.split_bases, self.split_bases_tolerance, file=f)
         f.close()
-        
+
 
     def _make_setup_job(self):
         self.setup_job = lsf.Job(
@@ -213,8 +216,16 @@ bmod -w "done($array_id)" $combine_id''', file=f)
 
         print(r'''cat tmp.array.e.* > 02.array.e
 cat tmp.array.o.* > 02.array.o
-cat tmp.array.out.* | gzip -9 -c > blast.out.tmp.gz
-farm_blast --fix_coords_in_blast_output x x''', file=f)
+cat tmp.array.out.* | gzip -9 -c > blast.out.tmp.gz''', file=f)
+        if self.test:
+            p = os.path.dirname(self.farm_blast_script)
+            p = os.path.join(p, os.pardir)
+            p = os.path.normpath(p)
+            print('PYTHONPATH=' + p + ':$PYTHONPATH', file=f)
+        if self.test:
+            print(self.farm_blast_script, '--test --fix_coords_in_blast_output x x', file=f)
+        else:
+            print(self.farm_blast_script, '--fix_coords_in_blast_output x x', file=f)
         print('rm', ' '.join(self.files_to_delete), file=f)
         print('touch FINISHED', file=f)
         f.close()
