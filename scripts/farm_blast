@@ -1,11 +1,18 @@
 #!/usr/bin/env python3
 
-from farm_blast import pipeline, utils
+import os
+import sys
 
+if '--test' in sys.argv:
+    p = os.path.dirname(sys.argv[0])
+    p = os.path.join(p, os.pardir)
+    sys.path.insert(1, p)
+
+from farm_blast import pipeline, utils
 options = pipeline.get_opts()
 
 if options.fix_coords_in_blast_output:
     utils.fix_blast_coords('blast.out.tmp.gz', 'query.split.coords', 'blast.out.gz')
 else:
-    blast_pipeline = pipeline.Pipeline(options)
+    blast_pipeline = pipeline.Pipeline(options, os.path.abspath(__file__))
     blast_pipeline.run()

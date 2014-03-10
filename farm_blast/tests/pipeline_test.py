@@ -21,10 +21,11 @@ class TestPipeline(unittest.TestCase):
             '--split_bases', '100',
             '--outdir', 'tmp.Farm_blast_test',
             '--bsub_name_prefix', 'name',
+            '--test',
             self.ref,
             self.qry])
-        self.p = pipeline.Pipeline(options)
-        
+        self.p = pipeline.Pipeline(options, os.path.abspath('scripts/farm_blast'))
+
 
     def test_make_setup_script_ref_already_indexed(self):
         expected_script = 'tmp.make_setup_script_expected'
@@ -38,7 +39,7 @@ class TestPipeline(unittest.TestCase):
             '--bsub_name_prefix', 'name',
             ref,
             self.qry])
-        self.p = pipeline.Pipeline(options)
+        self.p = pipeline.Pipeline(options, os.path.abspath('scripts/farm_blast'))
         self.p._make_setup_script(script_name=test_script)
 
         f = open(expected_script, 'w')
@@ -109,7 +110,32 @@ class TestPipeline(unittest.TestCase):
         expected_script = os.path.join(data_dir, 'pipeline_test.03.combine.sh')
         test_script = 'tmp.make_combine_array_script_test'
         self.p._make_combine_script(script_name=test_script)
-        self.assertTrue(filecmp.cmp(expected_script, test_script))
+        expected = [
+            'cat tmp.array.e.* > 02.array.e',
+            'cat tmp.array.o.* > 02.array.o',
+            'cat tmp.array.out.* | gzip -9 -c > blast.out.tmp.gz',
+            'PYTHONPATH=',
+            '--fix_coords_in_blast_output x x',
+            'rm tmp.array.* query.split.* blast.out.tmp.gz 02.array.id 03.combine.sh.id',
+            'touch FINISHED'
+        ]
+
+        try:
+            f = open(test_script)
+        except:
+            sys.exit('Error opening file', test_script)
+
+        got = [x.rstrip() for x in f.readlines()]
+        f.close()
+
+        # the script has the absolute path to farm_blast in it. We don't know
+        # where that will be, so ignore that part
+        self.assertEqual(len(got), len(expected))
+        self.assertTrue(got[3].startswith('PYTHONPATH'))
+        self.assertTrue('farm_blast' in got[4])
+        got[4] = got[4].split(None,1)[1]
+        self.assertListEqual(got[:2], expected[:2])
+        self.assertListEqual(got[5:], expected[5:])
         os.unlink(test_script)
 
 
@@ -117,7 +143,7 @@ class TestPipeline(unittest.TestCase):
         self.p.run()
         expected = os.path.join(data_dir, 'pipeline_test.blast.out')
         subprocess.call('gunzip ' + os.path.join(self.p.outdir, 'blast.out.gz'), shell=True)
-        self.assertTrue(filecmp.cmp(expected, os.path.join(self.p.outdir, 'blast.out')))
+        self.assertTrue(filecmp.cmp(expected, os.path.join(self.p.outdir, 'blast.out'), shallow=False))
 
 
     def tearDown(self):

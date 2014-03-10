@@ -1,4 +1,5 @@
 from fastaq import utils
+import sys
 
 class Error (Exception): pass
 
@@ -21,12 +22,23 @@ def fix_blast_coords(blast_file, coords_file, outfile):
     fin = utils.open_file_read(blast_file)
     fout = utils.open_file_write(outfile)
     for line in fin:
-        data = line.rstrip().split('\t')
+        # blastn sticks a bunch of header lines in the tabulated
+        # output file. Need to ignore them
+        if '\t' not in line:
+            continue
+
+        # Lines are supposed to be tab delimited. Sometimes they
+        # have a space character following a tab character, so
+        # split on whitespace. This is OK because the pipeline has already
+        # removed whitespace from sequence names
+        data = line.rstrip().split()
         if data[0] in coords_offset:
             data[6] = str(int(data[6]) + coords_offset[data[0]][1])
             data[7] = str(int(data[7]) + coords_offset[data[0]][1])
             data[0] = coords_offset[data[0]][0]
-            line = '\t'.join(data)
+
+        # always reconstruct the line, because of spaces bug mentioned above
+        line = '\t'.join(data)
 
         print(line.rstrip(),file=fout)
 

@@ -166,7 +166,7 @@ class TestBlast(unittest.TestCase):
             'blastall -p blastp',
             'blastall -p tblastn',
             'blastall -p tblastx',
-            'blastall -p blastn -n'
+            'blastall -p blastn -n T'
         ]
  
         for i in range(len(correct)):
