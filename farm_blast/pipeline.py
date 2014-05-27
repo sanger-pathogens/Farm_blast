@@ -204,7 +204,8 @@ bmod -w "done($array_id)" $combine_id''', file=f)
             self.bsub_queue,
             0.5,
             'bash ' + self.combine_script,
-            memory_units=self.memory_units
+            memory_units=self.memory_units,
+            threads=2
         )
 
 

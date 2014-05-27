@@ -102,7 +102,7 @@ class TestPipeline(unittest.TestCase):
     def test_make_combine_job(self):
         self.p._make_combine_job()
         # the bsub call has a check for home directory, so check everthing after this is ok
-        expected = r'''-R "select[mem>500] rusage[mem=500]" -M500 -o 03.combine.sh.o -e 03.combine.sh.e -J name.combine bash 03.combine.sh'''
+        expected = r'''-n 2 -R "span[hosts=1] select[mem>500] rusage[mem=500]" -M500 -o 03.combine.sh.o -e 03.combine.sh.e -J name.combine bash 03.combine.sh'''
         self.assertTrue(str(self.p.combine_job).endswith(expected))
 
 
