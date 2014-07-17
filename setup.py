@@ -16,6 +16,6 @@ setup(
     url='https://github.com/sanger-pathogens/Farm_blast',
     scripts=glob.glob('scripts/*'),
     test_suite='nose.collector',
-    install_requires=['nose >= 1.3', 'fastaq >= 0.1', 'farmpy >= 0.2'],
+    install_requires=['nose >= 1.3', 'fastaq >= 1.2', 'farmpy >= 0.2'],
     license='GPLv3',
 )
