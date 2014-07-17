@@ -31,6 +31,7 @@ bsub_group.add_argument('--bsub_name_prefix', help='Set the prefix of the names 
 
 
 advanced_opts_group = parser.add_argument_group('Advanced options')
+advanced_opts_group.add_argument('--act', action='store_true', help='Make ACT-friendly blast file, by concatenating all reference sequences together and all query sequences together before blasting.')
 advanced_opts_group.add_argument('--blast_options', help='Put any extra options to the blast call (i.e. blastall, blastn, blastx ...etc) in quotes. e.g. --blast_options "-r 2". Whatever you put in here is NOT sanity checked.', default = '', metavar='"options in quotes"')
 advanced_opts_group.add_argument('--debug', action='store_true', help='Just make scripts etc but do not run anything')
 advanced_opts_group.add_argument('--outdir', help='Name of output directory (must not exist already)', metavar='output directory', default=None)
@@ -59,6 +60,7 @@ class Pipeline:
         self.bsub_queue = options.bsub_queue
         self.farm_blast_script = farm_blast_script
         self.test = options.test
+        self.union_for_act = options.act
 
         self.blast = blast.Blast(
             self.reference,
@@ -127,8 +129,12 @@ class Pipeline:
             raise Error('Error opening setup script "' + script_name + '" for writing')
 
         print('set -e', file=f)
-        if not self.blast.blast_db_exists():
-            print('fastaq_to_fasta -s', self.reference, 'reference.fa', file=f)
+        if not self.blast.blast_db_exists() or self.union_for_act:
+            if self.union_for_act:
+                print('fastaq_merge', self.reference, '- |',
+                      'fastaq_to_fasta -s - reference.fa', file=f)
+            else:
+                print('fastaq_to_fasta -s', self.reference, 'reference.fa', file=f)
             self.reference = 'reference.fa'
             self.blast.reference = self.reference
             print(self.blast.format_database_command(), file=f)
@@ -136,8 +142,13 @@ class Pipeline:
 
         # blast strips off everything after the first whitespace, so do this
         # before chunking so names stay consistent with query fasta and in blast output
-        print('fastaq_to_fasta -s', self.query, '- |',
-              'fastaq_chunker --skip_all_Ns', '-', 'query.split', self.split_bases, self.split_bases_tolerance, file=f)
+        if self.union_for_act:
+            print('fastaq_merge', self.query, '- |',
+                  'fastaq_to_fasta -s - - |', end=' ', file=f)
+        else:
+            print('fastaq_to_fasta -s', self.query, '- |', end=' ', file=f)
+
+        print('fastaq_chunker --skip_all_Ns', '-', 'query.split', self.split_bases, self.split_bases_tolerance, file=f)
         f.close()
 
 

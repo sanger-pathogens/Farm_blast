@@ -69,6 +69,26 @@ class TestPipeline(unittest.TestCase):
         os.unlink(test_script)
 
 
+    def test_make_setup_script_with_union_for_act(self):
+        expected_script = 'tmp.make_setup_script_expected'
+        test_script = 'tmp.make_setup_script_test'
+        self.p.union_for_act = True
+        self.p._make_setup_script(script_name=test_script)
+
+        f = open(expected_script, 'w')
+        print('set -e', file=f)
+        print('fastaq_merge', os.path.abspath(self.ref), '- |',
+              'fastaq_to_fasta -s - reference.fa', file=f)
+        print('makeblastdb -dbtype nucl -in reference.fa', file=f)
+        print('fastaq_merge', os.path.abspath(self.qry), '- |',
+              'fastaq_to_fasta -s - - |',
+              'fastaq_chunker --skip_all_Ns - query.split 100 1', file=f)
+        f.close()
+        self.assertTrue(filecmp.cmp(expected_script, test_script))
+        os.unlink(expected_script)
+        os.unlink(test_script)
+
+
     def test_make_setup_job(self):
         self.p._make_setup_job()
         # the bsub call has a check for home directory, so check everthing after this is ok
