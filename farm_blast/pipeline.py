@@ -324,6 +324,6 @@ cat tmp.array.out.* | gzip -9 -c > blast.out.tmp.gz''', file=f)
             print('Jobs submitted to the farm.')
             print('Final job id is', self.combine_job.job_id)
             print('\nPipeline finished OK when this file is written:\n   ', os.path.join(self.outdir, 'FINISHED'))
-            print('\nFinal file will be called:\n   ', os.path.join(self.outdir, 'out.blast.gz'))
+            print('\nFinal file will be called:\n   ', os.path.join(self.outdir, 'blast.out.gz'))
 
         os.chdir(original_dir)
