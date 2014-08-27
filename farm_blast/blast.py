@@ -2,6 +2,23 @@ import os
 
 class Error (Exception): pass
 
+ref_not_protein_types = set([
+    'blastn',
+    'blastn-short',
+    'dc-megablast',
+    'megablast',
+    'rmblastn',
+    'tblastn',
+    'tblastx',
+])
+
+ref_protein_types = set([
+    'blastp',
+    'blastp-short',
+    'deltablast',
+    'blastx'
+])
+
 class Blast:
     def __init__(
          self,
@@ -24,23 +41,6 @@ class Blast:
         self.word_size = word_size
         self.no_filter = no_filter
         self.extra_options = extra_options
-
-        ref_not_protein_types = set([
-            'blastn',
-            'blastn-short',
-            'dc-megablast',
-            'megablast',
-            'rmblastn',
-            'tblastn',
-            'tblastx',
-        ])
-
-        ref_protein_types = set([
-            'blastp',
-            'blastp-short',
-            'deltablast',
-            'blastx'
-        ])
 
         if self.blast_type in ref_not_protein_types:
             self.protein_reference = False
