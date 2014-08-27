@@ -136,42 +136,32 @@ class TestBlast(unittest.TestCase):
     def test_make_blast_type_string(self):
         '''Test blast type string'''
         test_objs = [
-            blast.Blast('ref', 'qry'),
-            blast.Blast('ref', 'qry', blast_type='blastn'),
-            blast.Blast('ref', 'qry', blast_type='blastx'),
-            blast.Blast('ref', 'qry', blast_type='blastp'),
-            blast.Blast('ref', 'qry', blast_type='tblastn'),
-            blast.Blast('ref', 'qry', blast_type='tblastx'),
-            blast.Blast('ref', 'qry', blast_type='megablast'),
-            blast.Blast('ref', 'qry', blastall=True),
-            blast.Blast('ref', 'qry', blastall=True, blast_type='blastn'),
-            blast.Blast('ref', 'qry', blastall=True, blast_type='blastx'),
-            blast.Blast('ref', 'qry', blastall=True, blast_type='blastp'),
-            blast.Blast('ref', 'qry', blastall=True, blast_type='tblastn'),
-            blast.Blast('ref', 'qry', blastall=True, blast_type='tblastx'),
-            blast.Blast('ref', 'qry', blastall=True, blast_type='megablast'),
+            (blast.Blast('ref', 'qry'), 'blastn -task blastn'),
+            (blast.Blast('ref', 'qry', blast_type='blastn'), 'blastn -task blastn'),
+            (blast.Blast('ref', 'qry', blast_type='blastn-short'), 'blastn -task blastn-short'),
+            (blast.Blast('ref', 'qry', blast_type='dc-megablast'), 'blastn -task dc-megablast'),
+            (blast.Blast('ref', 'qry', blast_type='megablast'), 'blastn -task megablast'),
+            (blast.Blast('ref', 'qry', blast_type='rmblastn'), 'blastn -task rmblastn'),
+            (blast.Blast('ref', 'qry', blast_type='blastx'), 'blastx'),
+            (blast.Blast('ref', 'qry', blast_type='blastp'), 'blastp -task blastp'),
+            (blast.Blast('ref', 'qry', blast_type='blastp-short'), 'blastp -task blastp-short'),
+            (blast.Blast('ref', 'qry', blast_type='deltablast'), 'blastp -task deltablast'),
+            (blast.Blast('ref', 'qry', blast_type='tblastn'), 'tblastn'),
+            (blast.Blast('ref', 'qry', blast_type='tblastx'), 'tblastx'),
+            (blast.Blast('ref', 'qry', blastall=True), 'blastall -p blastn'),
+            (blast.Blast('ref', 'qry', blastall=True, blast_type='blastn'), 'blastall -p blastn'),
+            (blast.Blast('ref', 'qry', blastall=True, blast_type='blastx'), 'blastall -p blastx'),
+            (blast.Blast('ref', 'qry', blastall=True, blast_type='blastp'), 'blastall -p blastp'),
+            (blast.Blast('ref', 'qry', blastall=True, blast_type='tblastn'), 'blastall -p tblastn'),
+            (blast.Blast('ref', 'qry', blastall=True, blast_type='tblastx'), 'blastall -p tblastx'),
+            (blast.Blast('ref', 'qry', blastall=True, blast_type='megablast'), 'blastall -p blastn -n T')
         ]
         
-        correct = [
-            'blastn -task blastn',
-            'blastn -task blastn',
-            'blastx',
-            'blastp',
-            'tblastn',
-            'tblastx',
-            'blastn',
-            'blastall -p blastn',
-            'blastall -p blastn',
-            'blastall -p blastx',
-            'blastall -p blastp',
-            'blastall -p tblastn',
-            'blastall -p tblastx',
-            'blastall -p blastn -n T'
-        ]
- 
-        for i in range(len(correct)):
-            self.assertEqual(correct[i], test_objs[i]._make_blast_type_string())
+        for t in test_objs:
+            self.assertEqual(t[1], t[0]._make_blast_type_string())
 
+        with self.assertRaises(blast.Error):
+            b = blast.Blast('ref', 'qry', blast_type='oops')
 
     def test_get_run_command(self):
         '''Test command to run blast made OK'''

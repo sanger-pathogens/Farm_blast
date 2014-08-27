@@ -19,7 +19,7 @@ parser.add_argument('--test', action='store_true', help=argparse.SUPPRESS)
 
 common_blast_group = parser.add_argument_group('Common BLAST options')
 common_blast_group.add_argument('--blastall', action='store_true', help='Use blastall instead of the default blast+')
-common_blast_group.add_argument('-p', '--blast_type', help='Type of blast to run [%(default)s]', choices=['megablast', 'blastn', 'blastp', 'blastx', 'tblastn', 'tblastx'], default='blastn')
+common_blast_group.add_argument('-p', '--blast_type', help='Type of blast to run [%(default)s]', choices=sorted(list(blast.ref_not_protein_types)) + sorted(list(blast.ref_protein_types)), default='blastn')
 common_blast_group.add_argument('-e', '--evalue', help='Set the evalue cutoff')
 common_blast_group.add_argument('-W', '--word_size', help='Set the word size')
 common_blast_group.add_argument('--no_filter', action='store_true', help='Do not filter query sequence (equivalent to -F F in blastall, -dust no in blast+). By default, the query will be filtered')
