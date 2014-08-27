@@ -25,15 +25,29 @@ class Blast:
         self.no_filter = no_filter
         self.extra_options = extra_options
 
-        ref_not_protein_types = ['megablast', 'blastn', 'tblastn', 'tblastx']
-        ref_protein_types = ['blastp', 'blastx']
+        ref_not_protein_types = set([
+            'blastn',
+            'blastn-short',
+            'dc-megablast',
+            'megablast',
+            'rmblastn',
+            'tblastn',
+            'tblastx',
+        ])
+
+        ref_protein_types = set([
+            'blastp',
+            'blastp-short',
+            'deltablast',
+            'blastx'
+        ])
 
         if self.blast_type in ref_not_protein_types:
             self.protein_reference = False
         elif self.blast_type in ref_protein_types:
             self.protein_reference = True
         else:
-            raise Error('blast_type must be one of ' + ' '.join(ref_not_protein_types + ref_protein_types))
+            raise Error('blast_type must be one of ' + ' '.join(list(ref_not_protein_types) + list(ref_protein_types)))
 
     def blast_db_exists(self):
         if self.protein_reference:
@@ -121,12 +135,24 @@ class Blast:
             else:
                 return 'blastall -p ' + self.blast_type
         else:
-            if self.blast_type == 'megablast':
-                return 'blastn'
-            elif self.blast_type == 'blastn':
-                return 'blastn -task blastn'
-            else:
-                return self.blast_type
+            type_to_string = {
+                'blastn': 'blastn -task blastn',
+                'blastn-short': 'blastn -task blastn-short',
+                'dc-megablast': 'blastn -task dc-megablast',
+                'megablast': 'blastn -task megablast',
+                'rmblastn': 'blastn -task rmblastn',
+                'tblastn': 'tblastn',
+                'tblastx': 'tblastx',
+                'blastp': 'blastp -task blastp',
+                'blastp-short': 'blastp -task blastp-short',
+                'deltablast': 'blastp -task deltablast',
+                'blastx': 'blastx'
+            }
+
+            try:
+                return type_to_string[self.blast_type]
+            except:
+                raise Error('Problem with blast type: ' + self.blast_type)
 
 
     def get_run_command(self):
