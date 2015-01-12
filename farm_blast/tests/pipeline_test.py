@@ -44,8 +44,8 @@ class TestPipeline(unittest.TestCase):
 
         f = open(expected_script, 'w')
         print('set -e', file=f)
-        print('fastaq_to_fasta -s', os.path.abspath(self.qry), '- |',
-              'fastaq_chunker --skip_all_Ns - query.split 100 1', file=f)
+        print('fastaq to_fasta -s', os.path.abspath(self.qry), '- |',
+              'fastaq chunker --skip_all_Ns - query.split 100 1', file=f)
         f.close()
         self.assertTrue(filecmp.cmp(expected_script, test_script))
         os.unlink(expected_script)
@@ -59,10 +59,10 @@ class TestPipeline(unittest.TestCase):
 
         f = open(expected_script, 'w')
         print('set -e', file=f)
-        print('fastaq_to_fasta -s', os.path.abspath(self.ref), 'reference.fa', file=f)
+        print('fastaq to_fasta -s', os.path.abspath(self.ref), 'reference.fa', file=f)
         print('makeblastdb -dbtype nucl -in reference.fa', file=f)
-        print('fastaq_to_fasta -s', os.path.abspath(self.qry), '- |',
-              'fastaq_chunker --skip_all_Ns - query.split 100 1', file=f)
+        print('fastaq to_fasta -s', os.path.abspath(self.qry), '- |',
+              'fastaq chunker --skip_all_Ns - query.split 100 1', file=f)
         f.close()
         self.assertTrue(filecmp.cmp(expected_script, test_script))
         os.unlink(expected_script)
@@ -77,12 +77,12 @@ class TestPipeline(unittest.TestCase):
 
         f = open(expected_script, 'w')
         print('set -e', file=f)
-        print('fastaq_merge', os.path.abspath(self.ref), '- |',
-              'fastaq_to_fasta -s - reference.fa', file=f)
+        print('fastaq merge', os.path.abspath(self.ref), '- |',
+              'fastaq to_fasta -s - reference.fa', file=f)
         print('makeblastdb -dbtype nucl -in reference.fa', file=f)
-        print('fastaq_merge', os.path.abspath(self.qry), '- |',
-              'fastaq_to_fasta -s - - |',
-              'fastaq_chunker --skip_all_Ns - query.split 100 1', file=f)
+        print('fastaq merge', os.path.abspath(self.qry), '- |',
+              'fastaq to_fasta -s - - |',
+              'fastaq chunker --skip_all_Ns - query.split 100 1', file=f)
         f.close()
         self.assertTrue(filecmp.cmp(expected_script, test_script))
         os.unlink(expected_script)
