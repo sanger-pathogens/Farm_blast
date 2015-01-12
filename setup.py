@@ -7,7 +7,7 @@ def read(fname):
 
 setup(
     name='Farm_blast',
-    version='0.1',
+    version='0.1.1',
     description='Package to run blast in parallel on a compute farm',
     long_description=read('README.md'),
     packages = find_packages(),
