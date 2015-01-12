@@ -131,10 +131,10 @@ class Pipeline:
         print('set -e', file=f)
         if not self.blast.blast_db_exists() or self.union_for_act:
             if self.union_for_act:
-                print('fastaq_merge', self.reference, '- |',
-                      'fastaq_to_fasta -s - reference.fa', file=f)
+                print('fastaq merge', self.reference, '- |',
+                      'fastaq to_fasta -s - reference.fa', file=f)
             else:
-                print('fastaq_to_fasta -s', self.reference, 'reference.fa', file=f)
+                print('fastaq to_fasta -s', self.reference, 'reference.fa', file=f)
             self.reference = 'reference.fa'
             self.blast.reference = self.reference
             print(self.blast.format_database_command(), file=f)
@@ -143,12 +143,12 @@ class Pipeline:
         # blast strips off everything after the first whitespace, so do this
         # before chunking so names stay consistent with query fasta and in blast output
         if self.union_for_act:
-            print('fastaq_merge', self.query, '- |',
-                  'fastaq_to_fasta -s - - |', end=' ', file=f)
+            print('fastaq merge', self.query, '- |',
+                  'fastaq to_fasta -s - - |', end=' ', file=f)
         else:
-            print('fastaq_to_fasta -s', self.query, '- |', end=' ', file=f)
+            print('fastaq to_fasta -s', self.query, '- |', end=' ', file=f)
 
-        print('fastaq_chunker --skip_all_Ns', '-', 'query.split', self.split_bases, self.split_bases_tolerance, file=f)
+        print('fastaq chunker --skip_all_Ns', '-', 'query.split', self.split_bases, self.split_bases_tolerance, file=f)
         f.close()
 
 
