@@ -1,4 +1,4 @@
-from fastaq import utils
+from pyfastaq import utils
 import sys
 
 class Error (Exception): pass
