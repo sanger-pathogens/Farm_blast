@@ -8,17 +8,10 @@ Installation
 
 Prerequisites:
   * [NCBI BLAST] [NCBI BLAST] blast+, and optionally blastall, installed and their commands in your path
-  * [Fastaq] [Fastaq] >= v3.0.2
-  * [Farmpy] [Farmpy] >= v0.2
 
-Once the prerequisites are installed, run the tests:
+Once the prerequisites are installed, install with pip:
 
-    python3 setup.py test
-
-Note that the tests check that blast+ is installed, but not blastall because it is optional.
-If all was OK, then install:
-
-    python3 setup.py install
+    pip3 install farm_blast
 
 Synopsis
 --------
@@ -48,5 +41,3 @@ To get all the options, use --help:
     farm_blast --help
 
 [NCBI BLAST]: http://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=Download
-[Fastaq]: https://github.com/sanger-pathogens/Fastaq
-[Farmpy]: https://github.com/sanger-pathogens/Farmpy
