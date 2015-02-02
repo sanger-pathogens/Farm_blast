@@ -8,7 +8,7 @@ Installation
 
 Prerequisites:
   * [NCBI BLAST] [NCBI BLAST] blast+, and optionally blastall, installed and their commands in your path
-  * [Fastaq] [Fastaq] >= v0.1
+  * [Fastaq] [Fastaq] >= v3.0.2
   * [Farmpy] [Farmpy] >= v0.2
 
 Once the prerequisites are installed, run the tests:
