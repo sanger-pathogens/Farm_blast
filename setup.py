@@ -30,7 +30,7 @@ if not found_all_progs:
 
 
 setup(
-    name='Farm_blast',
+    name='farm_blast',
     version='0.1.2',
     description='Package to run blast in parallel on a compute farm',
     packages = find_packages(),
