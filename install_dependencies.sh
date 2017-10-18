@@ -55,5 +55,8 @@ export PYTHONPATH=$py_path:$PYTHONPATH
 
 cd $start_dir
 
+pip3 install farmpy
+pip3 install pyfastaq
+
 set +e
 set +x
