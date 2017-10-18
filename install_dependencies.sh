@@ -5,7 +5,7 @@ set -e
 
 start_dir=$(pwd)
 
-BLAST_VERSION="2.7.0"
+BLAST_VERSION="2.6.0"
 BLAST_DOWNLOAD_FILENAME="ncbi-blast-${BLAST_VERSION}+-x64-linux.tar.gz"
 BLAST_PLUS_URL="ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/${BLAST_VERSION}/${BLAST_DOWNLOAD_FILENAME}"
 
@@ -50,8 +50,8 @@ update_path () {
 export PATH
 update_path $BLAST_BIN_DIR
 
-#py_path=$(which python3)
-#export PYTHONPATH=$py_path:$PYTHONPATH
+py_path=$(which python3)
+export PYTHONPATH=$py_path:$PYTHONPATH
 
 cd $start_dir
 
