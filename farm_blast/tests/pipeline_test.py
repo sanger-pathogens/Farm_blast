@@ -158,13 +158,22 @@ class TestPipeline(unittest.TestCase):
         self.assertListEqual(got[5:], expected[5:])
         os.unlink(test_script)
 
-
     def test_pipeline(self):
         self.p.run()
         expected = os.path.join(data_dir, 'pipeline_test.blast.out')
         subprocess.call('gunzip ' + os.path.join(self.p.outdir, 'blast.out.gz'), shell=True)
-        self.assertTrue(filecmp.cmp(expected, os.path.join(self.p.outdir, 'blast.out'), shallow=False))
-
+        expected_list = []
+        with open(expected,'r') as f:
+            for line in f:
+                row = line.split()
+                expected_list.append([row[0:2],row[3:9],row[11]])
+        gotten = os.path.join(self.p.outdir, 'blast.out')
+        gotten_list = []
+        with open(gotten, 'r') as f:
+            for line in f:
+                row = line.split()
+                gotten_list.append([row[0:2],row[3:9],row[11]])
+        self.assertEqual(expected_list, gotten_list)
 
     def tearDown(self):
         if os.path.exists(self.p.outdir):
