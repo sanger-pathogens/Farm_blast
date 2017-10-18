@@ -41,3 +41,5 @@ To get all the options, use --help:
     farm_blast --help
 
 [NCBI BLAST]: http://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=Download
+
+Build status: [![Build Status](https://travis-ci.org/sanger-pathogens/Farm_blast.svg?branch=master)](https://travis-ci.org/sanger-pathogens/Farm_blast)
