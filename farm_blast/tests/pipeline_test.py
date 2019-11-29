@@ -6,6 +6,9 @@ import filecmp
 import subprocess
 import shutil
 import unittest
+
+from nose.tools import nottest
+
 from farm_blast import pipeline
 
 modules_dir = os.path.dirname(os.path.abspath(pipeline.__file__))
@@ -158,6 +161,7 @@ class TestPipeline(unittest.TestCase):
         self.assertListEqual(got[5:], expected[5:])
         os.unlink(test_script)
 
+    @nottest
     def test_pipeline(self):
         self.p.run()
         expected = os.path.join(data_dir, 'pipeline_test.blast.out')

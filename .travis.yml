@@ -3,7 +3,7 @@ python:
   - "3.7"
 sudo: false
 install:
-  - "source ./install_dependencies.sh"
+  - travis_retry source ./install_dependencies.sh
 before_script:
   - pip install codecov
 script:
