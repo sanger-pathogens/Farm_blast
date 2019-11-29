@@ -67,4 +67,4 @@ To get all the options, use `--help`:
 Farm_blast is free software, licensed under [GPLv3](https://github.com/sanger-pathogens/Farm_blast/blob/master/LICENSE).
 
 ## Feedback/Issues
-Please report any issues to the [issues page](https://github.com/sanger-pathogens/Farm_blast/issues) or email path-help@sanger.ac.uk.
+Please report any issues to the [issues page](https://github.com/sanger-pathogens/Farm_blast/issues)
