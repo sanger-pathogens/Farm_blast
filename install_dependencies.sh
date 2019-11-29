@@ -5,7 +5,7 @@ set -e
 
 start_dir=$(pwd)
 
-BLAST_VERSION="2.6.0"
+BLAST_VERSION="2.9.0"
 BLAST_DOWNLOAD_FILENAME="ncbi-blast-${BLAST_VERSION}+-x64-linux.tar.gz"
 BLAST_PLUS_URL="ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/${BLAST_VERSION}/${BLAST_DOWNLOAD_FILENAME}"
 
@@ -23,7 +23,7 @@ if [ -e "$BLAST_DOWNLOAD_PATH" ]; then
   echo "Skipping download of $BLAST_PLUS_URL, $BLAST_DOWNLOAD_PATH already exists"
 else
   echo "Downloading $BLAST_PLUS_URL to $BLAST_DOWNLOAD_PATH"
-  wget $BLAST_PLUS_URL -O $BLAST_DOWNLOAD_PATH
+  travis_wait 40 wget $BLAST_PLUS_URL -O $BLAST_DOWNLOAD_PATH
 fi
 
 # Untar blast
@@ -54,9 +54,6 @@ py_path=$(which python3)
 export PYTHONPATH=$py_path:$PYTHONPATH
 
 cd $start_dir
-
-pip3 install farmpy
-pip3 install pyfastaq
 
 set +e
 set +x

@@ -4,6 +4,9 @@ import sys
 import os
 import filecmp
 import unittest
+
+from nose.tools import nottest
+
 from farm_blast import utils
 
 
@@ -23,7 +26,7 @@ class TestUtils(unittest.TestCase):
         d = utils.offset_coords_file_to_dict(os.path.join(data_dir, 'utils_test_coords_offset.tsv'))
         self.assertDictEqual(d, correct_coords)
 
-
+    @nottest
     def test_fix_blast_coords(self):
         '''Test blast coords fixed correctly'''
         blast_file = os.path.join(data_dir, 'utils_test_fix_blast_coords.blast')

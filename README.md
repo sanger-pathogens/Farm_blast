@@ -2,7 +2,10 @@
 Run blast+ or blastall in parallel on an LSF compute farm.
 
 [![Build Status](https://travis-ci.org/sanger-pathogens/Farm_blast.svg?branch=master)](https://travis-ci.org/sanger-pathogens/Farm_blast)   
-[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-brightgreen.svg)](https://github.com/sanger-pathogens/Farm_blast/blob/master/LICENSE)
+[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-brightgreen.svg)](https://github.com/sanger-pathogens/Farm_blast/blob/master/LICENSE) .  
+[![Docker Build Status](https://img.shields.io/docker/cloud/build/sangerpathogens/farm_blast.svg)](https://hub.docker.com/r/sangerpathogens/farm_blast)  
+[![Docker Pulls](https://img.shields.io/docker/pulls/sangerpathogens/farm_blast.svg)](https://hub.docker.com/r/sangerpathogens/farm_blast)  
+[![codecov](https://codecov.io/gh/sanger-pathogens/Farm_blast/branch/master/graph/badge.svg)](https://codecov.io/gh/sanger-pathogens/Farm_blast) 
 
 ## Contents
   * [Introduction](#introduction)
@@ -64,4 +67,4 @@ To get all the options, use `--help`:
 Farm_blast is free software, licensed under [GPLv3](https://github.com/sanger-pathogens/Farm_blast/blob/master/LICENSE).
 
 ## Feedback/Issues
-Please report any issues to the [issues page](https://github.com/sanger-pathogens/Farm_blast/issues) or email path-help@sanger.ac.uk.
+Please report any issues to the [issues page](https://github.com/sanger-pathogens/Farm_blast/issues)
