@@ -23,7 +23,7 @@ if [ -e "$BLAST_DOWNLOAD_PATH" ]; then
   echo "Skipping download of $BLAST_PLUS_URL, $BLAST_DOWNLOAD_PATH already exists"
 else
   echo "Downloading $BLAST_PLUS_URL to $BLAST_DOWNLOAD_PATH"
-  wget -q $BLAST_PLUS_URL -O $BLAST_DOWNLOAD_PATH
+  travis_wait 20 wget $BLAST_PLUS_URL -O $BLAST_DOWNLOAD_PATH
 fi
 
 # Untar blast
