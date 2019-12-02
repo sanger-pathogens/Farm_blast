@@ -26,6 +26,7 @@ Farm_blast has the following dependencies:
 
 ### Required dependencies
   * [blast+](http://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=Download)
+  * [fastaq](https://github.com/sanger-pathogens/Fastaq)
 ### Optional dependencies
   * blastall
 
