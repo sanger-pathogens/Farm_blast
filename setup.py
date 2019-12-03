@@ -25,8 +25,7 @@ for program in required_progs:
     print(found, program, sep='\t')
 
 if not found_all_progs:
-    print('Cannot install because some programs from the blast+ package not found.', file=sys.stderr)
-    sys.exit(1)
+    print('Some programs from the blast+ package not found, farm_blast may not work properly.', file=sys.stderr)
 
 
 setup(
