@@ -242,7 +242,7 @@ cat tmp.array.out.* | gzip -9 -c > blast.out.tmp.gz''', file=f)
         if self.test:
             print(self.farm_blast_script, '--test --fix_coords_in_blast_output x x', file=f)
         else:
-            print(self.farm_blast_script, '--fix_coords_in_blast_output x x', file=f)
+            print('farm_blast --fix_coords_in_blast_output x x', file=f)
         print('rm', ' '.join(self.files_to_delete), file=f)
         print('touch FINISHED', file=f)
         f.close()
